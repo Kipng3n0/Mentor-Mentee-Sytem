@@ -21,8 +21,10 @@ const FeedbackForm = ({ submitFeedback }) => {
       setFeedbackSubmitted(true); // Show success message
       setFeedbackText(""); // Reset fields after successful submission
     } catch (error) {
-      console.error("Error submitting feedback:", error.message);
-      alert(`Failed to submit feedback: ${error.message}`);
+      console.error("Error submitting feedback:", error);
+      alert(`Failed to submit feedback: ${error.response?.data?.message || error.message}`);
+    
+    
     } finally {
       setIsSubmitting(false);
     }
@@ -30,9 +32,15 @@ const FeedbackForm = ({ submitFeedback }) => {
 
   return (
     <div className="w-full max-w-2xl mx-auto mt-8 p-4">
-      <form className="space-y-4 bg-zinc-800 p-4 md:p-6 rounded-xl shadow-lg">
+      <form
+        onSubmit={handleSubmit}
+        className="space-y-4 bg-zinc-800 p-4 md:p-6 rounded-xl shadow-lg"
+      >
         <div>
-          <label htmlFor="feedback" className="block text-sm md:text-base font-medium text-white mb-2">
+          <label
+            htmlFor="feedback"
+            className="block text-sm md:text-base font-medium text-white mb-2"
+          >
             Your Feedback
           </label>
           <textarea
