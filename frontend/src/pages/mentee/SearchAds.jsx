@@ -46,8 +46,10 @@ const SearchAds = () => {
 
   const filteredAds = ads.filter(
     (ad) =>
-      ad.profession.toLowerCase().includes(filtered.toLowerCase()) ||
-      ad.location.toLowerCase().includes(filtered.toLowerCase())
+          ad.profession.toLowerCase().includes(filtered.toLowerCase()) ||
+          ad.location.toLowerCase().includes(filtered.toLowerCase())||
+          ad.availableHours.toLowerCase().includes(filtered.toLowerCase()) ||
+          ad.postedBy?.username?.toLowerCase().includes(filtered.toLowerCase())
   );
 
   return (
@@ -57,7 +59,7 @@ const SearchAds = () => {
         <h2 className="text-2xl font-bold mb-4">Search Tutor Ads</h2>
         <input
           type="text"
-          placeholder="Search by profession or location"
+          placeholder="Search by Profession/Location/Time"
           className="w-full px-3 py-2 mb-6 bg-zinc-600 rounded"
           value={filtered}
           onChange={(e) => setFiltered(e.target.value)}
@@ -77,6 +79,10 @@ const SearchAds = () => {
               </p>
               <p>
                 <strong>Location:</strong> {ad.location}
+              </p>
+              <p>
+                <strong>Posted by:</strong> {ad.postedBy?.username || "Unknown"}{" "}
+                ({ad.postedBy?.email || "No email"})
               </p>
 
               {/* Appointment Inputs */}
