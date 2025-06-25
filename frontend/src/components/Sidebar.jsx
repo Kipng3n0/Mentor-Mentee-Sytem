@@ -115,6 +115,18 @@ const Sidebar = ({ role }) => {
                 </Link>
               </li>
             )}
+            {role === "mentee" && (
+              <li>
+                <Link
+                  to="/mentee/search-ads"
+                  className="flex items-center text-white p-2 rounded-lg hover:bg-purple-600 transition"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FaChalkboardTeacher className="text-xl mr-3" />
+                  <span>Find Tutors</span>
+                </Link>
+              </li>
+            )}
 
             {/* Achievements */}
             <li>

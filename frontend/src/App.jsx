@@ -6,6 +6,7 @@ import PrivateRoute from "./components/PrivateRoute";
 
 import MenteeDashboard from "./pages/mentee/MenteeDashboard";
 import MenteeAppointment from "./pages/mentee/MenteeAppointment";
+import SearchAds from "./pages/mentee/SearchAds";
 import Achievement from "./pages/mentee/Achievement";
 import Feedback from "./pages/mentee/Feedback";
 
@@ -27,7 +28,6 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
-
         {/* ------------------ Mentor Routes ------------------- */}
         <Route
           path="/mentor/dashboard"
@@ -37,7 +37,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentor/selectMentee"
           element={
@@ -46,7 +45,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentor/yourMentee"
           element={
@@ -55,7 +53,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentor/appointments"
           element={
@@ -72,7 +69,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentor/achievements"
           element={
@@ -81,7 +77,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentor/view-appointments"
           element={
@@ -90,7 +85,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentor/feedback"
           element={
@@ -99,7 +93,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         {/* ------------------- Mentee Routes ------------------- */}
         <Route
           path="/mentee/dashboard"
@@ -109,7 +102,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentee/appointments"
           element={
@@ -118,7 +110,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentee/achievements"
           element={
@@ -127,7 +118,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentee/view-appointments"
           element={
@@ -136,7 +126,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentee/view-achievements"
           element={
@@ -145,7 +134,6 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
         <Route
           path="/mentee/feedback"
           element={
@@ -154,13 +142,18 @@ const App = () => {
             </PrivateRoute>
           }
         />
-
+        <Route
+          path="/mentee/search-ads"
+          element={
+            <PrivateRoute role="mentee">
+              <SearchAds />
+            </PrivateRoute>
+          }
+        />
         {/* ---------------- Default Route ---------------- */}
         <Route
           path="*"
-          element={
-            <div className="text-center mt-10">DENNIS (frontend)</div>
-          }
+          element={<div className="text-center mt-10">DENNIS (frontend)</div>}
         />
       </Routes>
     </div>
