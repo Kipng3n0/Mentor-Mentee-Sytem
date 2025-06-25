@@ -43,6 +43,12 @@ const FeedbackView = () => {
               <p className="text-blue-500">
                 <span className="font-semibold">Feedback:</span> {feedback.text}
               </p>
+              {feedback.rating !== undefined && (
+                <p className="text-yellow-400">
+                  <span className="font-semibold">Rating:</span>{" "}
+                  {feedback.rating} / 5
+                </p>
+              )}
             </div>
           ))
         ) : (

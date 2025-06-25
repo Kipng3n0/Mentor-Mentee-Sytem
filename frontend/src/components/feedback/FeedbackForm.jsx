@@ -5,6 +5,7 @@ const FeedbackForm = ({ submitFeedback }) => {
   const [feedbackText, setFeedbackText] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false); // State to handle submission loading
   const [feedbackSubmitted, setFeedbackSubmitted] = useState(false); // State to handle successful submission message
+  const [rating, setRating] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -13,13 +14,14 @@ const FeedbackForm = ({ submitFeedback }) => {
       return alert("Please provide feedback.");
     }
 
-    const formData = { text: feedbackText };
+    const formData = { text: feedbackText, rating };
 
     try {
       setIsSubmitting(true);
       await submitFeedback(formData);
       setFeedbackSubmitted(true); // Show success message
       setFeedbackText(""); // Reset fields after successful submission
+      setRating(""); 
     } catch (error) {
       console.error("Error submitting feedback:", error);
       alert(`Failed to submit feedback: ${error.response?.data?.message || error.message}`);
@@ -52,6 +54,30 @@ const FeedbackForm = ({ submitFeedback }) => {
             placeholder="Share your thoughts about your mentor..."
             required
           />
+        </div>
+        <div>
+          <label
+            htmlFor="rating"
+            className="block text-sm md:text-base font-medium text-white mb-2"
+          >
+            Rate your session
+          </label>
+          <select
+            id="rating"
+            value={rating}
+            onChange={(e) => setRating(e.target.value)}
+            className="w-full px-3 py-2 bg-zinc-700 text-white rounded-lg border border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-500"
+            required
+          >
+            <option value="" disabled hidden>
+              Rate your mentor...
+            </option>
+            <option value="1">1 - Poor</option>
+            <option value="2">2 - Fair</option>
+            <option value="3">3 - Good</option>
+            <option value="4">4 - Very Good</option>
+            <option value="5">5 - Excellent</option>
+          </select>
         </div>
 
         <button
