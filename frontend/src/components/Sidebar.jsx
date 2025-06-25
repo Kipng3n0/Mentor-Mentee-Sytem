@@ -49,7 +49,7 @@ const Sidebar = ({ role }) => {
             <img src={logo} alt="App Logo" className="w-12 h-12 mr-3" />
             <h2 className="text-2xl font-bold text-purple-400">MENTOR LINK</h2>
           </div>
-          
+
           {/* Navigation Links */}
           <ul className="space-y-6">
             {/* Dashboard */}
@@ -103,6 +103,18 @@ const Sidebar = ({ role }) => {
                 <span>Appointments</span>
               </Link>
             </li>
+            {role === "mentor" && (
+              <li>
+                <Link
+                  to="/mentor/create-ad"
+                  className="flex items-center text-white p-2 rounded-lg hover:bg-blue-600 transition"
+                  onClick={() => setIsOpen(false)}
+                >
+                  <FaClipboardList className="text-xl mr-3" />
+                  <span>Create Ad</span>
+                </Link>
+              </li>
+            )}
 
             {/* Achievements */}
             <li>

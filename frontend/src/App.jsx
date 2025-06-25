@@ -13,6 +13,7 @@ import MentorDashboard from "./pages/mentor/MentorDashboard";
 import YourMentee from "./pages/mentor/YourMentee";
 import SelectMentee from "./pages/mentor/SelectMentee";
 import MentorAppointment from "./pages/mentor/MentorAppointment";
+import CreateAd from "./pages/mentor/CreateAd";
 import MenteesAchievement from "./pages/mentor/MenteesAchievement";
 import ViewFeedback from "./pages/mentor/ViewFeedback";
 import ViewAppointment from "./components/Appointments/ViewAppointment";
@@ -60,6 +61,14 @@ const App = () => {
           element={
             <PrivateRoute role="mentor">
               <MentorAppointment />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/mentor/create-ad"
+          element={
+            <PrivateRoute role="mentor">
+              <CreateAd />
             </PrivateRoute>
           }
         />
@@ -150,12 +159,11 @@ const App = () => {
         <Route
           path="*"
           element={
-            <div className="text-center mt-10">HARE KRISHNA (frontend)</div>
+            <div className="text-center mt-10">DENNIS (frontend)</div>
           }
         />
       </Routes>
     </div>
-    
   );
 };
 
