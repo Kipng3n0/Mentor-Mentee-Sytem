@@ -5,13 +5,15 @@ import {
   updateAppointmentStatus,
   getAssignedMentees,
   getAssignedMentor,
-} from '../controllers/appointmentController.js';
+  requestAppointment,
+} from "../controllers/appointmentController.js";
 import { authMiddleware } from '../middleware/authMiddleware.js';
 
 const router = express.Router();
 
 // Create a new appointment
 router.post('/', authMiddleware, createAppointment);
+router.post("/request", authMiddleware, requestAppointment);
 
 // Get all appointments for the logged-in user
 router.get('/', authMiddleware, getAppointments);

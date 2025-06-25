@@ -7,7 +7,7 @@ export const createAd = async (req, res) => {
 
   try {
     const newAd = new Ad({
-      postedBy: mentorId, // ✅ Use correct field name from schema
+      postedBy: mentorId, // Use correct field name from schema
       profession,
       availableHours,
       pricing,
@@ -26,7 +26,7 @@ export const createAd = async (req, res) => {
 // GET /ads/my - Get ads by logged-in mentor
 export const getMyAds = async (req, res) => {
   try {
-    const ads = await Ad.find({ postedBy: req.user.id }); // ✅ Match schema
+    const ads = await Ad.find({ postedBy: req.user.id }); // Match schema
     res.status(200).json(ads);
   } catch (error) {
     res
@@ -34,4 +34,15 @@ export const getMyAds = async (req, res) => {
       .json({ message: "Failed to fetch ads", error: error.message });
   }
 };
+export const getAllAds = async (req, res) => {
+  try {
+    const ads = await Ad.find().populate("postedBy", "name email");
+    res.status(200).json(ads);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ message: "Failed to fetch ads", error: error.message });
+  }
+};
+  
   
