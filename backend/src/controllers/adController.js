@@ -36,7 +36,7 @@ export const getMyAds = async (req, res) => {
 };
 export const getAllAds = async (req, res) => {
   try {
-    const ads = await Ad.find().populate("postedBy", "name email");
+    const ads = await Ad.find().populate("postedBy", "username email");
     res.status(200).json(ads);
   } catch (error) {
     res
