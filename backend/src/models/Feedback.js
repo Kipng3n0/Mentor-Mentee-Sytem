@@ -17,6 +17,13 @@ const feedbackSchema = new mongoose.Schema(
       type: String,
       required: [true, "Feedback text is required"],
       maxlength: [1000, "Feedback text cannot exceed 1000 characters"],
+      
+    },
+    rating: {
+      type: Number,
+      required: [true, "Rating is required"],
+      min: [1, "Minimum rating is 1"],
+      max: [5, "Maximum rating is 5"],
     },
     createdAt: {
       type: Date,

@@ -6,10 +6,16 @@ import mongoose from "mongoose";
 // Create feedback
 export const createFeedback = async (req, res) => {
   try {
-    const { text } = req.body;
+    const { text, rating } = req.body;
 
-    if (!text) {
-      return res.status(400).json({ message: "Feedback text is required." });
+    if (!text || rating === undefined) {
+      return res
+        .status(400)
+        .json({ message: "Feedback text and rating are required." });
+    }
+
+    if (rating < 1 || rating > 5) {
+      return res.status(400).json({ message: "Rating must be between 1 and 5." });
     }
 
     // Ensure the user is a mentee
@@ -37,6 +43,7 @@ export const createFeedback = async (req, res) => {
       mentee: menteeId,
       mentor: mentorId,
       text,
+      rating,
     });
 
     await newFeedback.save();
