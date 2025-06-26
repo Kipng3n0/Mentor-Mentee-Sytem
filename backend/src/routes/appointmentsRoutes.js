@@ -6,6 +6,7 @@ import {
   getAssignedMentees,
   getAssignedMentor,
   requestAppointment,
+  cancelAppointment,
 } from "../controllers/appointmentController.js";
 import { authMiddleware } from '../middleware/authMiddleware.js';
 
@@ -26,5 +27,6 @@ router.get('/assigned-mentees', authMiddleware, getAssignedMentees);
 
 // Get mentor assigned to a mentee
 router.get('/mentor', authMiddleware, getAssignedMentor);
+router.patch("/cancel/:appointmentId", authMiddleware, cancelAppointment);
 
 export default router;

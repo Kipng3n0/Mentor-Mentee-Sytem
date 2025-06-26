@@ -80,6 +80,43 @@ export const requestAppointment = async (req, res) => {
       .json({ message: "Failed to request appointment", error: error.message });
   }
 };
+export const cancelAppointment = async (req, res) => {
+  const { appointmentId } = req.params;
+
+  try {
+    const appointment = await Appointment.findById(appointmentId);
+
+    if (!appointment) {
+      return res.status(404).json({ message: "Appointment not found" });
+    }
+
+    const userId = req.user.id.toString(); // Ensure userId is a string
+    const senderId = appointment.sender.toString();
+    const receiverId = appointment.receiver.toString();
+
+    // Allow either sender or receiver to cancel
+    if (userId !== senderId && userId !== receiverId) {
+      return res.status(403).json({
+        message: "You are not authorized to cancel this appointment",
+      });
+    }
+
+    appointment.status = "Cancelled";
+    await appointment.save();
+
+    res.status(200).json({
+      message: "Appointment cancelled successfully",
+      appointment,
+    });
+  } catch (error) {
+    console.error("Error cancelling appointment:", error);
+    res.status(500).json({
+      message: "Failed to cancel appointment",
+      error: error.message,
+    });
+  }
+};
+
 
 // Update the status of an appointment
 export const updateAppointmentStatus = async (req, res) => {
