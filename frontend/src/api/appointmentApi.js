@@ -41,6 +41,20 @@ export const fetchAppointments = async () => {
     throw new Error(error.response?.data?.message || 'Error fetching appointments');
   }
 };
+export const cancelAppointment = async (id) => {
+  const accessToken = localStorage.getItem("accessToken");
+  const response = await axios.patch(
+    `${API_URL}/cancel/${id}`,
+    {},
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    }
+  );
+  return response.data;
+};
+
 
 // Update appointment status (Accept/Reject)
 export const updateAppointmentStatus = async (appointmentId, status) => {
