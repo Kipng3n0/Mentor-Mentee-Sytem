@@ -1,30 +1,30 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import Sidebar from "../../components/Sidebar"; // Add this line
+import GoogleLocationSearch from "../../components/GoogleLocationSearch";
 
 const SearchAds = () => {
   const [ads, setAds] = useState([]);
-  const [filtered, setFiltered] = useState("");
-    const [message, setMessage] = useState("");
-    const [appointmentDetails, setAppointmentDetails] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [locationTerm, setLocationTerm] = useState("");
+  const [message, setMessage] = useState("");
+  const [appointmentDetails, setAppointmentDetails] = useState([]);
 
+  useEffect(() => {
+    axios
+      .get(`${import.meta.env.VITE_API_BASE_URL}/ads/public`)
+      .then((res) => {
+        setAds(res.data);
+        setAppointmentDetails(
+          res.data.map(() => ({ date: "", time: "", reason: "" }))
+        );
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
-    useEffect(() => {
-      axios
-        .get(`${import.meta.env.VITE_API_BASE_URL}/ads/public`)
-        .then((res) => {
-          setAds(res.data);
-          setAppointmentDetails(
-            res.data.map(() => ({ date: "", time: "", reason: "" }))
-          );
-        })
-        .catch((err) => console.error(err));
-    }, []);
-      
   const handleAppointment = async (mentorId, index) => {
     const { date, time, reason } = appointmentDetails[index];
     const token = localStorage.getItem("accessToken");
-    
 
     try {
       await axios.post(
@@ -42,16 +42,31 @@ const SearchAds = () => {
     updated[index][field] = value;
     setAppointmentDetails(updated);
   };
+
+  const filteredAds = ads.filter((ad) => {
+    const search = searchTerm.trim().toLowerCase();
+    const location = locationTerm.trim().toLowerCase();
+
+    const adProfession = ad.profession.toLowerCase();
+    const adUsername = ad.postedBy?.username?.toLowerCase() || "";
+    const adHours = ad.availableHours.toLowerCase();
+    const adLocation = ad.location.toLowerCase();
+
+    const matchesSearch =
+      search === "" ||
+      adProfession.includes(search) ||
+      adUsername.includes(search) ||
+      adHours.includes(search);
+
+    const cityOnly = location.split(",")[0].trim();
+    const matchesLocation =
+      location === "" ||
+      adLocation.includes(cityOnly.toLowerCase()) ||
+      cityOnly.toLowerCase().includes(adLocation);
+
+    return matchesSearch && matchesLocation;
+  });
   
-
-  const filteredAds = ads.filter(
-    (ad) =>
-          ad.profession.toLowerCase().includes(filtered.toLowerCase()) ||
-          ad.location.toLowerCase().includes(filtered.toLowerCase())||
-          ad.availableHours.toLowerCase().includes(filtered.toLowerCase()) ||
-          ad.postedBy?.username?.toLowerCase().includes(filtered.toLowerCase())
-  );
-
   return (
     <div className="flex">
       <Sidebar role="mentee" /> {/* Sidebar stays */}
@@ -59,11 +74,13 @@ const SearchAds = () => {
         <h2 className="text-2xl font-bold mb-4">Search Tutor Ads</h2>
         <input
           type="text"
-          placeholder="Search by Profession/Location/Time"
+          placeholder="Search by Profession/Time"
           className="w-full px-3 py-2 mb-6 bg-zinc-600 rounded"
-          value={filtered}
-          onChange={(e) => setFiltered(e.target.value)}
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
         />
+        <GoogleLocationSearch onPlaceSelect={setLocationTerm} />
+
         {message && <p className="text-green-400">{message}</p>}
         <div className="space-y-4">
           {filteredAds.map((ad, index) => (
@@ -81,8 +98,7 @@ const SearchAds = () => {
                 <strong>Location:</strong> {ad.location}
               </p>
               <p>
-                <strong>Posted by:</strong> {ad.postedBy?.username || "Unknown"}{" "}
-                ({ad.postedBy?.email || "No email"})
+                <strong>Email:</strong> {ad.postedBy?.email || "No email"}
               </p>
 
               {/* Appointment Inputs */}
