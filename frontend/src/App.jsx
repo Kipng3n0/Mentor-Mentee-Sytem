@@ -3,6 +3,7 @@ import { Routes, Route } from "react-router-dom";
 import Register from "./pages/auth/Register";
 import Login from "./pages/auth/Login";
 import PrivateRoute from "./components/PrivateRoute";
+import Profile from "./pages/Profile";
 
 import MenteeDashboard from "./pages/mentee/MenteeDashboard";
 import MenteeAppointment from "./pages/mentee/MenteeAppointment";
@@ -28,6 +29,7 @@ const App = () => {
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/profile" element={<Profile />} />
         {/* ------------------ Mentor Routes ------------------- */}
         <Route
           path="/mentor/dashboard"

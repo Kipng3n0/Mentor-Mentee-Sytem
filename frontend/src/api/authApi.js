@@ -21,3 +21,34 @@ export const loginUser = async (credentials) => {
     throw error.response?.data?.message || 'Login failed';
   }
 };
+// Function to update user details
+export const updateUser = async (userData) => {
+  try {
+    const response = await axios.put(
+      `${API_BASE_URL}/auth/me`,
+      userData,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+        },
+      }
+    );
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Update failed';
+  }
+};
+// Function to delete the user account
+export const deleteUser = async () => {
+  try {
+    const response = await axios.delete(`${API_BASE_URL}/auth/me`, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("accessToken")}`,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    throw error.response?.data?.message || 'Account deletion failed';
+  }
+};
+

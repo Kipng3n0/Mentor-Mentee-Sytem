@@ -151,6 +151,16 @@ const Sidebar = ({ role }) => {
                 <span>Feedback</span>
               </Link>
             </li>
+            <li>
+              <Link
+                to="/profile"
+                className="flex items-center text-white p-2 rounded-lg hover:bg-indigo-600 transition"
+                onClick={() => setIsOpen(false)}
+              >
+                <FaUserAlt className="text-xl mr-3" />
+                <span>My Profile</span>
+              </Link>
+            </li>
           </ul>
         </div>
 
