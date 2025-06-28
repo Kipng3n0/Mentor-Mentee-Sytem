@@ -48,7 +48,7 @@ const SearchAds = () => {
     const location = locationTerm.trim().toLowerCase();
 
     const adProfession = ad.profession.toLowerCase();
-    const adUsername = ad.postedBy?.username?.toLowerCase() || "";
+    const adUsername = ad.PostedByUser?.username?.toLowerCase() || "";
     const adHours = ad.availableHours.toLowerCase();
     const adLocation = ad.location.toLowerCase();
 
@@ -98,7 +98,7 @@ const SearchAds = () => {
                 <strong>Location:</strong> {ad.location}
               </p>
               <p>
-                <strong>Email:</strong> {ad.postedBy?.email || "No email"}
+                <strong>Email:</strong> {ad.PostedByUser?.email || "No email"}
               </p>
 
               {/* Appointment Inputs */}
@@ -134,7 +134,7 @@ const SearchAds = () => {
               </div>
 
               <button
-                onClick={() => handleAppointment(ad.postedBy._id, index)}
+                onClick={() => handleAppointment(ad.PostedByUser?.id, index)}
                 className="mt-3 bg-purple-500 px-3 py-1 rounded text-black hover:text-white"
               >
                 Request Appointment

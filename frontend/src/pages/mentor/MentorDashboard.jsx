@@ -34,7 +34,7 @@ const MentorDashboard = () => {
       await updateAppointmentStatus(id, status);
       setAppointments((prevAppointments) =>
         prevAppointments.map((appointment) =>
-          appointment._id === id ? { ...appointment, status } : appointment
+          appointment.id === id ? { ...appointment, status } : appointment
         )
       );
     } catch (error) {
@@ -54,7 +54,7 @@ const MentorDashboard = () => {
     try {
       await cancelAppointment(id);
       setAppointments((prev) =>
-        prev.map((a) => (a._id === id ? { ...a, status: "Cancelled" } : a))
+        prev.map((a) => (a.id === id ? { ...a, status: "Cancelled" } : a))
       );
     } catch (err) {
       console.error("Error cancelling appointment:", err);
@@ -85,7 +85,7 @@ const MentorDashboard = () => {
             <ul className="space-y-4">
               {appointments.map((appointment) => (
                 <li
-                  key={appointment._id}
+                  key={appointment.id}
                   className="p-4 bg-zinc-700 rounded-3xl border border-yellow-500"
                 >
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -108,7 +108,7 @@ const MentorDashboard = () => {
                       <>
                         <button
                           onClick={() =>
-                            handleAction(appointment._id, "Accepted")
+                            handleAction(appointment.id, "Accepted")
                           }
                           className="w-full md:w-auto bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600"
                         >
@@ -116,7 +116,7 @@ const MentorDashboard = () => {
                         </button>
                         <button
                           onClick={() =>
-                            handleAction(appointment._id, "Rejected")
+                            handleAction(appointment.id, "Rejected")
                           }
                           className="w-full md:w-auto bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600"
                         >
@@ -127,7 +127,7 @@ const MentorDashboard = () => {
 
                     {appointment.status === "Accepted" && (
                       <button
-                        onClick={() => handleCancel(appointment._id)}
+                        onClick={() => handleCancel(appointment.id)}
                         className="w-full md:w-auto bg-yellow-500 text-black px-4 py-2 rounded-lg hover:bg-yellow-600"
                       >
                         Cancel

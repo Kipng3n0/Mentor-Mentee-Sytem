@@ -62,38 +62,46 @@ const ViewAchievements = () => {
     <div className="bg-black text-white shadow-lg rounded-md min-h-screen overflow-hidden flex flex-col">
       <div className="p-4 border-b bg-black">
         <h1 className="text-2xl md:text-[35px] font2 font-bold text-center">
-          {userRole === "mentee" ? "Your Achievements" : "Mentees' Achievements"}
+          {userRole === "mentee"
+            ? "Your Achievements"
+            : "Mentees' Achievements"}
         </h1>
       </div>
 
       {/* Scrollable content */}
       <div className="flex-1 overflow-y-auto p-2 md:p-4 space-y-4">
         {loading && <div className="text-center">Loading...</div>}
-        {error && <div className="text-center text-red-500">Error: {error}</div>}
+        {error && (
+          <div className="text-center text-red-500">Error: {error}</div>
+        )}
         {achievements.length > 0 ? (
           achievements.map((achievement) => (
             <div
-              key={achievement._id}
+              key={achievement.id}
               className="p-4 border border-yellow-500 rounded-3xl shadow-sm bg-zinc-800 hover:bg-zinc-900 transition"
             >
               <div className="flex flex-col md:flex-row md:justify-between md:items-center">
                 <h3 className="text-base md:text-lg font-semibold text-white mb-2 md:mb-0">
-                  Mentee Name: {achievement.mentee?.username || "Anonymous"}
+                  Mentee Name: {achievement.menteeUser?.username || "Anonymous"}
                 </h3>
                 {achievement.fileData && (
                   <button
-                    onClick={() => handleDownloadFile(achievement._id)}
+                    onClick={() => handleDownloadFile(achievement.id)}
                     className="text-blue-500 hover:underline text-sm md:text-base"
                   >
                     Download Attached File
                   </button>
                 )}
               </div>
-              <p className="text-white mt-2 text-sm md:text-base">Achievement: {achievement.achievementText}</p>
+              <p className="text-white mt-2 text-sm md:text-base">
+                Achievement: {achievement.achievementText}
+              </p>
             </div>
           ))
         ) : (
-          <p className="text-center text-purple-500">No achievements to display.</p>
+          <p className="text-center text-purple-500">
+            No achievements to display.
+          </p>
         )}
       </div>
 

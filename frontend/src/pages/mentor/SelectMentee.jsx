@@ -28,12 +28,13 @@ const SelectMentee = () => {
   const handleSelectMentee = async (menteeId) => {
     try {
       const mentorId = "mentorId"; // Adjust accordingly
-      const response = await addMentee(mentorId, menteeId);
+      const response = await addMentee( menteeId);
       if (response) {
-        setMentees((prev) => prev.filter((mentee) => mentee._id !== menteeId));
+        setMentees((prev) => prev.filter((mentee) => mentee.id !== menteeId));
         setFilteredMentees((prev) =>
-          prev.filter((mentee) => mentee._id !== menteeId)
+          prev.filter((mentee) => mentee.id !== menteeId)
         );
+        
       }
     } catch (err) {
       setError("Failed to select mentee");
@@ -85,7 +86,7 @@ const SelectMentee = () => {
                 <h2 className="text-lg font-semibold mb-2">{mentee.username}</h2>
                 <button
                   className="bg-yellow-500 text-black px-4 py-2 rounded-lg"
-                  onClick={() => handleSelectMentee(mentee._id)}
+                  onClick={() => handleSelectMentee(mentee.id)}
                 >
                   Select
                 </button>

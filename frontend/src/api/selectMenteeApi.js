@@ -7,18 +7,18 @@ import axios from "axios";
 export const fetchUnselectedMentees = async () => {
   try {
     const token = localStorage.getItem("accessToken");
+    if (!token) throw new Error("No authorization token found");
 
-    if (!token) {
-      throw new Error("No authorization token found");
-    }
+    const response = await axios.get(
+      `${import.meta.env.VITE_API_BASE_URL}/mentorships/available`,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
-    const response = await axios.get(`${import.meta.env.VITE_API_BASE_URL}/mentorships/available`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
-
-    if (!response.data || !response.data.mentees || response.data.mentees.length === 0) {
+    if (!response.data?.mentees?.length) {
       throw new Error("No mentees available");
     }
 
@@ -36,7 +36,7 @@ export const fetchUnselectedMentees = async () => {
  * @param {string} menteeId - The ID of the mentee to add
  * @returns {Promise<Object>} - Returns the success message from the backend
  */
-export const addMentee = async (mentorId, menteeId) => {
+export const addMentee = async (menteeId) => {
   try {
     const token = localStorage.getItem("accessToken");
 
@@ -45,7 +45,7 @@ export const addMentee = async (mentorId, menteeId) => {
     }
 
     const response = await axios.post(`${import.meta.env.VITE_API_BASE_URL}/mentorships/assign`,
-      { mentorId, menteeId }, {
+      { menteeId }, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

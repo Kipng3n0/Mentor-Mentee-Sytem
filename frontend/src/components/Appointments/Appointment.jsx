@@ -54,7 +54,7 @@ const Appointment = () => {
           headers: { Authorization: `Bearer ${accessToken}` },
         })
         .then((response) =>
-          setFormData((prev) => ({ ...prev, mentor: response.data._id }))
+          setFormData((prev) => ({ ...prev, mentor: response.data.id }))
         )
         .catch((error) => console.error("Error fetching mentor:", error));
     }
@@ -76,7 +76,7 @@ const Appointment = () => {
         if (formData.mentee === "all") {
           const appointments = assignedMentees.map((mentee) => ({
             ...formData,
-            mentee: mentee._id,
+            mentee: mentee.id,
           }));
           await Promise.all(
             appointments.map((appointment) => submitAppointment(appointment))
@@ -156,7 +156,7 @@ const Appointment = () => {
               <option value="">Select a mentee</option>
               <option value="all">All Mentees</option>
               {assignedMentees.map((mentee) => (
-                <option key={mentee._id} value={mentee._id}>
+                <option key={mentee.id} value={mentee.id}>
                   {mentee.username}
                 </option>
               ))}
