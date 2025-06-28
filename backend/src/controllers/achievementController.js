@@ -1,18 +1,19 @@
-import Achievement from '../models/Achievement.js';
-import User from '../models/User.js';
-import multer from 'multer';
-import path from 'path';
+import Achievement from "../modelsSQL/Achievement.js";
+import User from "../modelsSQL/User.js";
+import multer from "multer";
+import path from "path";
 
-// Setup storage engine for multer (optional, for temporary storage)
-const storage = multer.memoryStorage(); // Store file in memory
-const upload = multer({ storage: storage });
+// Setup multer
+const storage = multer.memoryStorage();
+export const upload = multer({ storage });
 
-// Controller to upload achievement as a mentee
+// Upload Achievement
+// Upload Achievement
 export const uploadAchievement = async (req, res) => {
   const { achievementText } = req.body;
 
-  if (req.user.role !== 'mentee') {
-    return res.status(403).json({ message: 'Only mentees can upload achievements' });
+  if (req.user.role !== "mentee") {
+    return res.status(403).json({ message: "Only mentees can upload achievements" });
   }
 
   try {
@@ -20,82 +21,105 @@ export const uploadAchievement = async (req, res) => {
     let mimeType = null;
 
     if (req.file) {
-      fileData = req.file.buffer; // Store the file buffer
-      mimeType = req.file.mimetype; // Store the MIME type
+      fileData = req.file.buffer;
+      mimeType = req.file.mimetype;
     }
 
     const newAchievement = await Achievement.create({
-      mentee: req.user.id,
+      mentee_id: req.user.id, // Use mentee_id here
       achievementText,
       fileData,
       mimeType,
     });
 
-    res.status(201).json({ message: 'Achievement uploaded successfully', achievement: newAchievement });
+    res.status(201).json({
+      message: "Achievement uploaded successfully",
+      achievement: newAchievement,
+    });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to upload achievement', error: error.message });
+    res.status(500).json({ message: "Failed to upload achievement", error: error.message });
   }
 };
 
-// Controller to view self achievements as a mentee
+
+// View self achievements
 export const viewSelfAchievements = async (req, res) => {
-  if (req.user.role !== 'mentee') {
-    return res.status(403).json({ message: 'Only mentees can view their own achievements' });
+  if (req.user.role !== "mentee") {
+    return res
+      .status(403)
+      .json({ message: "Only mentees can view their own achievements" });
   }
 
   try {
-    const achievements = await Achievement.find({ mentee: req.user.id })
-      .sort({ createdAt: -1 })
-      .populate('mentee', 'username'); // Populate mentee's username
+    const achievements = await Achievement.findAll({
+      where: { mentee: req.user.id },
+      include: [{ model: User, as: "menteeUser", attributes: ["username"] }],
+      order: [["createdAt", "DESC"]],
+    });
 
     res.status(200).json({ achievements });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch achievements', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to fetch achievements", error: error.message });
   }
 };
 
-// Controller to view achievements of assigned mentees as a mentor
+// View assigned mentees' achievements// View assigned mentees' achievements
+// View assigned mentees' achievements
 export const viewMenteesAchievements = async (req, res) => {
-  if (req.user.role !== 'mentor') {
-    return res.status(403).json({ message: 'Only mentors can view mentees achievements' });
+  if (req.user.role !== "mentor") {
+    return res.status(403).json({ message: "Only mentors can view mentees achievements" });
   }
 
   try {
-    const mentor = await User.findById(req.user.id).populate('assignedMentees');
-
-    if (!mentor) {
-      return res.status(404).json({ message: 'Mentor not found' });
-    }
-
-    const menteeIds = mentor.assignedMentees.map((mentee) => mentee._id);
-
-    // Fetch achievements for assigned mentees and populate mentee's username
-    const achievements = await Achievement.find({ mentee: { $in: menteeIds } })
-      .sort({ createdAt: -1 })
-      .populate('mentee', 'username'); // Populate mentee's username
+    const achievements = await Achievement.findAll({
+      include: [
+        {
+          model: User,
+          as: "menteeUser",
+          attributes: ["username", "mentorId"],
+          where: {
+            mentorId: req.user.id,
+          },
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
 
     res.status(200).json({ achievements });
   } catch (error) {
-    res.status(500).json({ message: 'Failed to fetch mentees achievements', error: error.message });
+    res.status(500).json({
+      message: "Failed to fetch mentees achievements",
+      error: error.message,
+    });
   }
 };
 
-// Controller to download file from database
+
+// Download achievement file
 export const downloadFile = async (req, res) => {
   const { fileId } = req.params;
 
   try {
-    const achievement = await Achievement.findById(fileId);
+    const achievement = await Achievement.findByPk(fileId);
 
     if (!achievement || !achievement.fileData) {
-      return res.status(404).json({ message: 'File not found' });
+      return res.status(404).json({ message: "File not found" });
     }
 
-    res.setHeader('Content-Type', achievement.mimeType);
-    res.setHeader('Content-Disposition', `attachment; filename="${achievement._id}${path.extname(achievement.mimeType)}"`);
+    res.setHeader("Content-Type", achievement.mimeType);
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${achievement.id}${path.extname(
+        achievement.mimeType
+      )}"`
+    );
 
     res.send(achievement.fileData);
   } catch (error) {
-    res.status(500).json({ message: 'Failed to download file', error: error.message });
+    res
+      .status(500)
+      .json({ message: "Failed to download file", error: error.message });
   }
 };

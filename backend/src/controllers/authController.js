@@ -1,5 +1,4 @@
-// src/controllers/authController.js
-import User from "../models/User.js";
+import User from "../modelsSQL/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
@@ -8,72 +7,83 @@ export const registerUser = async (req, res) => {
   const { username, email, password, role } = req.body;
 
   try {
-    
-    const user = new User({
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = await User.create({
       username,
       email,
-      password,
+      password: hashedPassword,
       role,
     });
 
-    await user.save();
-
-    res
-      .status(201)
-      .json({ success: true, message: "User registered successfully!", user });
+    res.status(201).json({
+      success: true,
+      message: "User registered successfully!",
+      user,
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, message: "Error registering user", error });
+    res.status(500).json({
+      success: false,
+      message: "Error registering user",
+      error: error.message,
+    });
   }
 };
 
-// Login a user
 export const loginUser = async (req, res) => {
-  const { email, password, role } = req.body;
-
   try {
-    // Find user by email
-    const user = await User.findOne({ email });
+    const { email, password, role } = req.body;
+
+    const user = await User.findOne({ where: { email } });
+
     if (!user) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "User not found" });
     }
 
-    // Check if the password matches
-    const isMatch = await user.isPasswordMatch(password);
+    // 🔐 Compare password
+    const isMatch = await bcrypt.compare(password, user.password);
+
     if (!isMatch) {
-      return res.status(400).json({ message: "Invalid email or password" });
+      return res.status(400).json({ message: "Invalid credentials" });
     }
 
-    // Check if the role matches
+    // 🎭 Role match
     if (user.role !== role) {
       return res
         .status(403)
-        .json({ message: `Access denied. You are logged in as a ${user.role}.` });
+        .json({ message: `Role mismatch. You're registered as ${user.role}` });
     }
 
     // Generate tokens
-    const accessToken = user.generateAuthToken(); // Generates access token
-    const refreshToken = jwt.sign(
-      { id: user._id },
-      process.env.REFRESH_TOKEN_SECRET,
-      { expiresIn: process.env.REFRESH_TOKEN_EXPIRY || "7d" }
+    const accessToken = jwt.sign(
+      { id: user.id, role: user.role },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRY }
     );
 
-    // Return success response with tokens and role
+    const refreshToken = jwt.sign(
+      { id: user.id },
+      process.env.REFRESH_TOKEN_SECRET,
+      { expiresIn: process.env.REFRESH_TOKEN_EXPIRY }
+    );
+
     res.status(200).json({
       message: "Login successful",
       accessToken,
       refreshToken,
-      role: user.role, // Include role in the response
+      role: user.role,
     });
   } catch (error) {
-    res.status(500).json({ message: "Error logging in", error });
+    console.error("LOGIN ERROR:", error); // 👈 Add this
+    res.status(500).json({
+      message: "Error logging in",
+      error: error.message,
+    });
   }
 };
 
 
-// Refresh the access token
+// Refresh access token
 export const refreshToken = async (req, res) => {
   const { refreshToken } = req.body;
 
@@ -83,42 +93,51 @@ export const refreshToken = async (req, res) => {
 
   try {
     const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
-    const user = await User.findById(decoded.id);
+    const user = await User.findByPk(decoded.id);
 
     if (!user) {
       return res.status(400).json({ message: "Invalid refresh token" });
     }
 
-    // Generate new access token
-    const accessToken = user.generateAuthToken();
+    const accessToken = jwt.sign(
+      { id: user.id },
+      process.env.ACCESS_TOKEN_SECRET,
+      { expiresIn: process.env.ACCESS_TOKEN_EXPIRY || "15m" }
+    );
 
     res.status(200).json({ accessToken });
   } catch (error) {
-    res.status(400).json({ message: "Invalid or expired refresh token", error });
+    res.status(400).json({
+      message: "Invalid or expired refresh token",
+      error: error.message,
+    });
   }
 };
+
 // Update user profile
 export const updateUser = async (req, res) => {
   try {
     const userId = req.user.id;
     const updates = req.body;
 
-    const updatedUser = await User.findByIdAndUpdate(userId, updates, {
-      new: true,
-      runValidators: true,
+    const [updatedCount, updatedRows] = await User.update(updates, {
+      where: { id: userId },
+      returning: true,
     });
 
-    if (!updatedUser) {
+    if (updatedCount === 0) {
       return res.status(404).json({ message: "User not found" });
     }
 
-    res
-      .status(200)
-      .json({ message: "Profile updated successfully", user: updatedUser });
+    res.status(200).json({
+      message: "Profile updated successfully",
+      user: updatedRows[0],
+    });
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: "Failed to update profile", error: error.message });
+    res.status(500).json({
+      message: "Failed to update profile",
+      error: error.message,
+    });
   }
 };
 
@@ -126,9 +145,20 @@ export const updateUser = async (req, res) => {
 export const deleteUser = async (req, res) => {
   try {
     const userId = req.user.id;
-    await User.findByIdAndDelete(userId);
+
+    const deleted = await User.destroy({
+      where: { id: userId },
+    });
+
+    if (!deleted) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.status(200).json({ message: "User account deleted successfully" });
   } catch (error) {
-    res.status(500).json({ message: "Error deleting account", error: error.message });
+    res.status(500).json({
+      message: "Error deleting account",
+      error: error.message,
+    });
   }
 };

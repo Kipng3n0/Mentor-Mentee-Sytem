@@ -1,9 +1,7 @@
-import User from "../models/User.js";
-import Feedback from "../models/Feedback.js";
-import mongoose from "mongoose";
+import User from "../modelsSQL/User.js";
+import Feedback from "../modelsSQL/Feedback.js";
 
-
-// Create feedback
+// Create feedback (mentee ➝ mentor)
 export const createFeedback = async (req, res) => {
   try {
     const { text, rating } = req.body;
@@ -15,42 +13,41 @@ export const createFeedback = async (req, res) => {
     }
 
     if (rating < 1 || rating > 5) {
-      return res.status(400).json({ message: "Rating must be between 1 and 5." });
+      return res
+        .status(400)
+        .json({ message: "Rating must be between 1 and 5." });
     }
 
-    // Ensure the user is a mentee
     if (!req.user || req.user.role !== "mentee") {
-      return res.status(403).json({ message: "Access denied. Only mentees can submit feedback." });
+      return res
+        .status(403)
+        .json({ message: "Access denied. Only mentees can submit feedback." });
     }
 
     const menteeId = req.user.id;
 
-    // Fetch the mentor ID dynamically if it's not in the token
+    // Get mentorId from JWT or fetch from DB if missing
     let mentorId = req.user.mentorId;
     if (!mentorId) {
-      const mentee = await User.findById(menteeId);
+      const mentee = await User.findByPk(menteeId);
       if (!mentee || !mentee.mentorId) {
-        return res.status(400).json({ message: "Mentee does not have an assigned mentor." });
+        return res
+          .status(400)
+          .json({ message: "Mentee does not have an assigned mentor." });
       }
       mentorId = mentee.mentorId;
     }
 
-    if (!mongoose.Types.ObjectId.isValid(mentorId)) {
-      return res.status(400).json({ message: "Invalid mentor information." });
-    }
-
-    const newFeedback = new Feedback({
-      mentee: menteeId,
-      mentor: mentorId,
+    const feedback = await Feedback.create({
       text,
       rating,
+      mentee: menteeId,
+      mentor: mentorId,
     });
-
-    await newFeedback.save();
 
     res.status(201).json({
       message: "Feedback submitted successfully.",
-      feedback: newFeedback,
+      feedback,
     });
   } catch (error) {
     console.error("Error creating feedback:", error);
@@ -62,16 +59,24 @@ export const createFeedback = async (req, res) => {
 export const getFeedbacksForMentor = async (req, res) => {
   try {
     if (!req.user || req.user.role !== "mentor") {
-      return res.status(403).json({ message: "Access denied. Only mentors can view feedback." });
+      return res
+        .status(403)
+        .json({ message: "Access denied. Only mentors can view feedback." });
     }
 
     const mentorId = req.user.id;
 
-    if (!mongoose.Types.ObjectId.isValid(mentorId)) {
-      return res.status(400).json({ message: "Invalid mentor ID." });
-    }
-
-    const feedbacks = await Feedback.find({ mentor: mentorId }).populate("mentee", "username email");
+    const feedbacks = await Feedback.findAll({
+      where: { mentor: mentorId },
+      include: [
+        {
+          model: User,
+          as: "MenteeUser", // must match your association alias
+          attributes: ["id", "username", "email"],
+        },
+      ],
+      order: [["createdAt", "DESC"]],
+    });
 
     res.status(200).json({
       message: "Feedback fetched successfully.",
