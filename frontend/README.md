@@ -1,14 +1,13 @@
-# Frontend Setup for Mentor-Mentee Platform
+# Frontend Setup for Mentor-Mentee System
 
-This document provides a detailed guide to set up the frontend of the Mentor-Mentee platform using **React**, **Vite**, and **Tailwind CSS**.
+This document provides a detailed guide to set up the frontend of the Mentor-Mentee system using **React**, **Vite**, and **Tailwind CSS**.
 
 ---
 
 ## Installation Steps
 
-### Step 1: Clone the Repository
+### Step 1: Navigate to the frontend directory
 ```bash
-git clone <repository-url>
 cd frontend
 ```
 

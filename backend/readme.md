@@ -1,5 +1,8 @@
 # Project Setup for Mentor-Mentee Platform Backend
-
+Navigate to Backend Directory
+```bash
+cd Mentor-Mentee-Sytem/backend
+```
 ## Step 1: Initialize the Project
 Run the following command to initialize the project:
 ```bash
@@ -9,51 +12,58 @@ npm init -y
 ## Step 2: Install Required Packages
 Install the necessary dependencies using:
 ```bash
-npm install dotenv nodemon express mongoose cors jsonwebtoken bcrypt bcryptjs body-parser multer node-cron nodemailer
+npm install express sequelize mysql2 dotenv cors jsonwebtoken bcrypt body-parser multer node-cron nodemailer
 ```
 
 ## Environment Variables
 Create a `.env` file in the root directory and configure it as follows:
 ```plaintext
 PORT=3001
-MONGODB_URI="mongodb_uri"
-ACCESS_TOKEN_SECRET="your_access_token"
-ACCESS_TOKEN_EXPIRY="1d"
-REFRESH_TOKEN_SECRET="your_refresh_token"
-REFRESH_TOKEN_EXPIRY="7d"
 
-SMTP_HOST="smtp.gmail.com"
+# MySQL configuration
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_USER=your_mysql_username
+MYSQL_PASSWORD=your_mysql_password
+MYSQL_DATABASE=MentorMentee
+
+# JWT settings
+ACCESS_TOKEN_SECRET=your_access_token
+ACCESS_TOKEN_EXPIRY=1d
+REFRESH_TOKEN_SECRET=your_refresh_token
+REFRESH_TOKEN_EXPIRY=7d
+
+# Email SMTP configuration
+SMTP_HOST=smtp.gmail.com
 SMTP_PORT=587
-SMTP_SECURE=false  # only set true if using port 465
-
-EMAIL_USER="your_app_email"
-EMAIL_PASS="your_app_password"
+SMTP_SECURE=false
+EMAIL_USER=your_app_email
+EMAIL_PASS=your_app_password
 ```
 
 ## README.md
-# Mentor-Mentee Platform Backend
+# Mentor-Mentee System Backend
 
-This is the backend implementation of an exclusive Mentor-Mentee platform, built with Node.js and MongoDB Atlas.
+This is the backend implementation of a Mentor-Mentee System, built with Node.js and MySQL Database.
 
 ## Features
 - Authentication using JWT
 - Password hashing with bcrypt
 - RESTful API with Express
-- MongoDB Atlas for data storage
-- Email notifications using Nodemailer
-- Scheduling tasks with node-cron
-- File uploads using multer
-
+- MySQL for relational data management
+- Sequelize ORM for SQL operations
+- Email notifications via Nodemailer
+- Scheduled tasks using node-cron
+- File uploads with multer
 ## Prerequisites
 - Node.js (v14 or higher)
-- MongoDB Atlas account
-
+- MySQL Server running locally or remotely
+- A MySQL database
 ## Installation
 
-1. Clone the repository:
+1. Navigate to the backend folder:
    ```bash
-   git clone <repository-url>
-   cd mentor-mentee-backend
+ cd Mentor-Mentee-Sytem/backend
    ```
 
 2. Install dependencies:
@@ -72,11 +82,9 @@ This is the backend implementation of an exclusive Mentor-Mentee platform, built
 
 ## Technologies Used
 - **Express.js**: For building RESTful APIs
-- **MongoDB Atlas**: For cloud-based database management
+- **MySQL**: For Relational database
 - **Nodemailer**: For sending email notifications
 - **node-cron**: For task scheduling
 - **Multer**: For handling file uploads
 - **bcrypt**: For password hashing
-
-## License
-This project is licensed under the MIT License.
+- **Sequelize**: ORM for database models and migrations

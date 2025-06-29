@@ -47,7 +47,7 @@ export const getAllAds = async (req, res) => {
       include: [
         {
           model: User,
-          as: "PostedByUser", //  this must match association alias
+          as: "PostedByUser",
           attributes: ["id", "username", "email"],
         },
       ],
