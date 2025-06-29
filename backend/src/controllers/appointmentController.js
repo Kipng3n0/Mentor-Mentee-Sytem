@@ -72,8 +72,8 @@ export const requestAppointment = async (req, res) => {
     }
 
     const appointment = await Appointment.create({
-      sender: menteeId,
-      receiver: mentorId,
+      sender_id: menteeId,
+      receiver_id: mentorId,
       date,
       time,
       reason,

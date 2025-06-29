@@ -84,7 +84,7 @@ const SearchAds = () => {
         {message && <p className="text-green-400">{message}</p>}
         <div className="space-y-4">
           {filteredAds.map((ad, index) => (
-            <div key={ad._id} className="border p-4 bg-zinc-700 rounded">
+            <div key={ad.id} className="border p-4 bg-zinc-700 rounded">
               <p>
                 <strong>Profession:</strong> {ad.profession}
               </p>
