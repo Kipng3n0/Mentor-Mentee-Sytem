@@ -1,13 +1,6 @@
 # Mentor-Mentee System
 <p>This project is a comprehensive platform that facilitates mentor-mentee interactions through features such as role-based authentication, appointment scheduling, feedback management, and achievement tracking. It offers a robust backend API and a user-friendly frontend, delivering personalized experiences for both mentors and mentees.</p>
 
-## 📌 API Documentation (Postman)
-- The API has been tested using **Postman**.
-- You can import the Postman collection using the provided JSON file: [MentorMentee2.postman_collection.json](backend/MentorMentee2.postman_collection.json).
-- Open Postman, go to **File > Import**, and select the JSON file to load the API endpoints.
-
----
-
 ## Key Features
 ### -Role-Based Authentication:
 <p>The platform supports role-based login and access control. Mentors and mentees can register, log in, and access their personalized dashboards based on their roles.</p>

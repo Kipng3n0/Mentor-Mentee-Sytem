@@ -71,7 +71,7 @@ export const getFeedbacksForMentor = async (req, res) => {
       include: [
         {
           model: User,
-          as: "MenteeUser", // must match your association alias
+          as: "MenteeUser", 
           attributes: ["id", "username", "email"],
         },
       ],

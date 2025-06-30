@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; // Use .env variables for flexibility
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL; 
 
 // Function to register a user
 export const registerUser = async (userData) => {

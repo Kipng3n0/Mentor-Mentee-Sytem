@@ -2,8 +2,8 @@ import dotenv from "dotenv";
 dotenv.config({ path: "./.env" });
 
 import { app } from "./app.js";
-import sequelize from "./db/mysql.js"; //  import your Sequelize instance
-import "./modelsSQL/associations.js"; //  register model relationships
+import sequelize from "./db/mysql.js"; 
+import "./modelsSQL/associations.js"; 
 
 const port = process.env.PORT || 3001;
 

@@ -48,7 +48,7 @@ const Ad = sequelize.define(
       onDelete: "SET NULL",
     },
 
-    //  Optional: keep Mongo `_id` style reference
+   
     postedBy: {
       type: DataTypes.STRING(24),
       allowNull: true,

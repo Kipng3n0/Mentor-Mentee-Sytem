@@ -18,7 +18,7 @@ export const authMiddleware = async (req, res, next) => {
       return res.status(401).json({ message: "Invalid token" });
     }
 
-    req.user = { id: user.id, role: user.role }; // Use user.id, not _id
+    req.user = { id: user.id, role: user.role }; 
     next();
   } catch (error) {
     if (error.name === "TokenExpiredError") {

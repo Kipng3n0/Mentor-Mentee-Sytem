@@ -33,7 +33,7 @@ const Feedback = sequelize.define(
       onDelete: "SET NULL",
     },
 
-    //  Legacy Mongo references
+  
     mentee: {
       type: DataTypes.STRING(24),
       allowNull: true,
