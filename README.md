@@ -1,6 +1,23 @@
 # Mentor-Mentee System
 <p>This project is a comprehensive platform that facilitates mentor-mentee interactions through features such as role-based authentication, appointment scheduling, feedback management, and achievement tracking. It offers a robust backend API and a user-friendly frontend, delivering personalized experiences for both mentors and mentees.</p>
 
+# Importing SQL file
+1. First nstall MySQL and setup then run the following command in terminal
+```bash
+mysql -u your_username -p your_database_name < database_dump.sql
+```
+Or, to create a new database and import:
+```bash
+mysql -u your_username -p
+```
+Then in the MySQL shell:
+```bash
+CREATE DATABASE your_database_name;
+USE your_database_name;
+SOURCE /path/to/database_dump.sql;
+```
+
+
 ## Key Features
 ### -Role-Based Authentication:
 <p>The platform supports role-based login and access control. Mentors and mentees can register, log in, and access their personalized dashboards based on their roles.</p>
