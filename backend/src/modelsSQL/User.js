@@ -40,10 +40,9 @@ const MySQLUser = sequelize.define(
         key: "id",
       },
       onUpdate: "CASCADE",
-      onDelete: "SET NULL", // remove mentor without deleting mentee
+      onDelete: "SET NULL",
     },
 
-    // For backward compatibility with MongoDB
     mongo_id: {
       type: DataTypes.STRING(24),
       unique: true,

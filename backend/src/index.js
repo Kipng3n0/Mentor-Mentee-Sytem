@@ -9,7 +9,7 @@ const port = process.env.PORT || 3001;
 
 // Connect to MySQL and start server
 sequelize
-  .sync() // Use { force: true } only if you want to drop & recreate tables
+  .sync() 
   .then(() => {
     console.log("MySQL DB connected and models synced.");
     app.listen(port, () => {
