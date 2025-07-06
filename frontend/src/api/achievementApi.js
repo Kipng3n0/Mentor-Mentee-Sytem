@@ -95,7 +95,7 @@ export const downloadFile = async (fileId) => {
       headers: {
         Authorization: `Bearer ${token}`,
       },
-      responseType: 'blob', // Ensure the response is treated as a blob
+      responseType: 'blob', 
     });
 
     return response.data;
