@@ -4,12 +4,12 @@ import axios from "axios";
  * Retrieves the `access_token` from localStorage.
  */
 const getAccessToken = () => {
-  return localStorage.getItem('accessToken'); // Adjust the key if stored differently
+  return localStorage.getItem('accessToken'); 
 };
 
 /**
  * Fetches all mentees assigned to the logged-in mentor.
- * @returns {Promise<Array>} - Array of mentees
+ * @returns {Promise<Array>} 
  */
 export const fetchSelectedMentees = async () => {
   try {
@@ -31,8 +31,8 @@ export const fetchSelectedMentees = async () => {
 
 /**
  * Removes a mentee from the mentor's list.
- * @param {string} menteeId - The ID of the mentee to remove
- * @returns {Promise<Object>} - Success message from the backend
+ * @param {string} menteeId 
+ * @returns {Promise<Object>} 
  */
 export const removeMentee = async (menteeId) => {
   try {

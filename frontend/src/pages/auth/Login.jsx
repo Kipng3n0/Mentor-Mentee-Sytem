@@ -11,7 +11,7 @@ const Login = () => {
   const [message, setMessage] = useState("");
   const [userRole, setUserRole] = useState("mentee"); // Default role
   const [isLoading, setIsLoading] = useState(false); // Loader state
-  const [currentIndex, setCurrentIndex] = useState(0); // Current slide index
+  const [currentIndex, setCurrentIndex] = useState(0); 
 
   const navigate = useNavigate();
 
