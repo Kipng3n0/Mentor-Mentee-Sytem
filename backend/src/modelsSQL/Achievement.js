@@ -1,4 +1,3 @@
-// modelsSQL/Achievement.js
 import { DataTypes } from "sequelize";
 import sequelize from "../db/mysql.js";
 import User from "./User.js";
