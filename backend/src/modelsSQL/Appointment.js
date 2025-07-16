@@ -49,7 +49,6 @@ const Appointment = sequelize.define(
       onDelete: "SET NULL",
     },
 
-    // Optional: for backward compatibility
     mongo_id: {
       type: DataTypes.STRING(24),
       allowNull: true,

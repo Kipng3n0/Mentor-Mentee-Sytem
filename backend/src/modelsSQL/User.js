@@ -31,7 +31,6 @@ const MySQLUser = sequelize.define(
       allowNull: false,
     },
 
-    // Self-referencing foreign key
     mentorId: {
       type: DataTypes.INTEGER,
       allowNull: true,
