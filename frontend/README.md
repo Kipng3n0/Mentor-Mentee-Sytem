@@ -73,6 +73,14 @@ npm run preview
 - `npm run dev`: Start the development server
 - `npm run build`: Build the app for production
 - `npm run preview`: Preview the production build
+- `npm test`: Run the Vitest suite once
+- `npm run test:watch`: Run Vitest in watch mode
+
+## Testing
+
+The test suite uses Vitest with jsdom and React Testing Library. It mocks
+application boundaries where needed and does not require API keys, a backend,
+or network access once dependencies are installed.
 
 ---
 
